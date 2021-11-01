@@ -1,6 +1,6 @@
-import { TrxTxSigner } from "./TrxTxSigner";
+const { TrxTxSigner } = require("./TrxTxSigner");
 
-export class Trc20TxSigner extends TrxTxSigner {
+class Trc20TxSigner extends TrxTxSigner {
   /**
    *
    * @param {string} privKey
@@ -49,3 +49,5 @@ export class Trc20TxSigner extends TrxTxSigner {
     return { txid: signedTx.txID, signedTx };
   }
 }
+
+module.exports = { Trc20TxSigner };

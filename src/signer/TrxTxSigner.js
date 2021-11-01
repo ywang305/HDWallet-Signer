@@ -1,5 +1,5 @@
-import { TxSigner } from "./TxSigner";
-import TronWeb from "tronweb";
+const { TxSigner } = require("./TxSigner");
+const TronWeb = require("tronweb");
 const HttpProvider = TronWeb.providers.HttpProvider;
 const fullNode = new HttpProvider("https://api.trongrid.io");
 const solidityNode = new HttpProvider("https://api.trongrid.io");
@@ -7,7 +7,7 @@ const eventServer = new HttpProvider("https://api.trongrid.io");
 
 const API_KEY = process.env.TRON_API_KEY || process.env.VUE_APP_TRON_API_KEY;
 
-export class TrxTxSigner extends TxSigner {
+class TrxTxSigner extends TxSigner {
   /**
    *
    * @param {string} privKey
@@ -38,3 +38,5 @@ export class TrxTxSigner extends TxSigner {
     return this.privKey;
   }
 }
+
+module.exports = { TrxTxSigner };

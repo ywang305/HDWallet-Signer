@@ -1,7 +1,7 @@
-import ERC20_ABI from "./ERC20_API";
-import { EthTxSigner } from "./EthTxSigner";
+const ERC20_ABI = require("./ERC20_API");
+const { EthTxSigner } = require("./EthTxSigner");
 
-export class Erc20TxSigner extends EthTxSigner {
+class Erc20TxSigner extends EthTxSigner {
   constructor(privKey, contractAddress, fromAddress) {
     super(privKey);
     this.contractAddress = contractAddress;
@@ -40,3 +40,5 @@ export class Erc20TxSigner extends EthTxSigner {
     };
   }
 }
+
+module.exports = { Erc20TxSigner };

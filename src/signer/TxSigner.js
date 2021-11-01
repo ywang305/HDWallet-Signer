@@ -1,4 +1,4 @@
-export class TxSigner {
+class TxSigner {
   /**
    *
    * @param {string} privKey
@@ -34,3 +34,5 @@ export class TxSigner {
     throw new Error("Not Implemented Method: toWIF");
   }
 }
+
+module.exports = { TxSigner };

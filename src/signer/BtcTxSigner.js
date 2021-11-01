@@ -1,8 +1,8 @@
-import bitcore from "bitcore-lib";
-import WIF from "wif";
-import { TxSigner } from "./TxSigner";
+const bitcore = require("bitcore-lib");
+const WIF = require("wif");
+const { TxSigner } = require("./TxSigner");
 
-export class BtcTxSigner extends TxSigner {
+class BtcTxSigner extends TxSigner {
   constructor(privKey, fromAddress) {
     super(privKey);
     this.fromAddress = fromAddress;
@@ -68,3 +68,5 @@ export class BtcTxSigner extends TxSigner {
     return this.wif;
   }
 }
+
+module.exports = { BtcTxSigner };

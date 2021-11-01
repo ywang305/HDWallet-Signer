@@ -1,16 +1,16 @@
-import { TxSigner } from "./TxSigner";
-import { cryptoWaitReady } from "@polkadot/util-crypto";
-import {
+const { TxSigner } = require("./TxSigner");
+const { cryptoWaitReady } = require("@polkadot/util-crypto");
+const {
   construct,
   getRegistry,
   methods,
   createMetadata,
-} from "@substrate/txwrapper-polkadot";
-import { Keyring } from "@polkadot/keyring";
-import { ApiPromise, WsProvider } from "@polkadot/api";
-import { EXTRINSIC_VERSION } from "@polkadot/types/extrinsic/v4/Extrinsic";
+} = require("@substrate/txwrapper-polkadot");
+const { Keyring } = require("@polkadot/keyring");
+const { ApiPromise, WsProvider } = require("@polkadot/api");
+const { EXTRINSIC_VERSION } = require("@polkadot/types/extrinsic/v4/Extrinsic");
 
-export class DotTxSigner extends TxSigner {
+class DotTxSigner extends TxSigner {
   constructor(privKey, fromAddress) {
     super(privKey);
     this.fromAddress = fromAddress;
@@ -154,7 +154,7 @@ export class DotTxSigner extends TxSigner {
   }
 }
 
-export function signWith(pair, signingPayload, options) {
+function signWith(pair, signingPayload, options) {
   const { registry, metadataRpc } = options;
   // Important! The registry needs to be updated with latest metadata, so make
   // sure to run `registry.setMetadata(metadata)` before signing.
@@ -168,3 +168,5 @@ export function signWith(pair, signingPayload, options) {
 
   return signature;
 }
+
+module.exports = { DotTxSigner };

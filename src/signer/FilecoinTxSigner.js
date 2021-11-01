@@ -1,12 +1,12 @@
-import { TxSigner } from "./TxSigner";
-import axios from "axios";
-import { FilecoinSigner } from "@blitslabs/filecoin-js-signer";
-import BigNumber from "bignumber.js";
+const { TxSigner } = require("./TxSigner");
+const axios = require("axios");
+const { FilecoinSigner } = require("@blitslabs/filecoin-js-signer");
+const BigNumber = require("bignumber.js");
 
 const FIL_PROVIDER =
   process.env.FIL_PROVIDER || process.env.VUE_APP_FIL_PROVIDER;
 
-export class FilecoinTxSigner extends TxSigner {
+class FilecoinTxSigner extends TxSigner {
   constructor(privKey) {
     super(privKey);
     const myAxios = axios.create({ baseURL: FIL_PROVIDER });
@@ -87,3 +87,5 @@ export class FilecoinTxSigner extends TxSigner {
     return lotusPrivKey;
   }
 }
+
+module.exports = { FilecoinTxSigner };

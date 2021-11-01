@@ -1,10 +1,10 @@
-import Web3 from "web3";
-import { TxSigner } from "./TxSigner";
+const Web3 = require("web3");
+const { TxSigner } = require("./TxSigner");
 
 const ETH_PROVIDER =
   process.env.ETH_PROVIDER || process.env.VUE_APP_ETH_PROVIDER;
 
-export class EthTxSigner extends TxSigner {
+class EthTxSigner extends TxSigner {
   constructor(privKey) {
     super(privKey);
     const { eth, utils } = new Web3(ETH_PROVIDER);
@@ -57,3 +57,5 @@ export class EthTxSigner extends TxSigner {
     return this.privKey;
   }
 }
+
+module.exports = { EthTxSigner };

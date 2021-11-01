@@ -1,12 +1,16 @@
 {
   "name": "hdwallet-signer",
-  "version": "0.8.0",
-  "description": "HDkey signer of transaction for BTC, ETH, TRX, FIL, DOT.",
-  "main": "index.js",
-  "type": "module",
+  "version": "0.1.1",
+  "description": "HDkey signer of transaction for BTC, ETH, TRX, FIL, DOT...",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ywang305/HDWallet-Signer"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "homepage": "https://github.com/ywang305/HDWallet-Signer",
   "keywords": [
     "HDKey",
     "HDWallet",

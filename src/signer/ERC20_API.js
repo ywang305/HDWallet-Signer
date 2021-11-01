@@ -220,4 +220,4 @@ const ERC20_ABI = [
     type: "event",
   },
 ];
-export default ERC20_ABI;
+module.exports = ERC20_ABI;

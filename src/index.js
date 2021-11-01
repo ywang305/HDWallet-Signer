@@ -1,13 +1,13 @@
-import { FilecoinTxSigner } from "./signer/FilecoinTxSigner";
-import { Erc20TxSigner } from "./signer/Erc20TxSigner";
-import { EthTxSigner } from "./signer/EthTxSigner";
-import { TrxTxSigner } from "./signer/TrxTxSigner";
-import { Trc20TxSigner } from "./signer/Trc20TxSigner";
-import { BtcTxSigner } from "./signer/BtcTxSigner";
-import { TxSigner } from "./signer/TxSigner";
-import { DotTxSigner } from "./signer/DotTxSigner";
+const { FilecoinTxSigner } = require("./signer/FilecoinTxSigner");
+const { Erc20TxSigner } = require("./signer/Erc20TxSigner");
+const { EthTxSigner } = require("./signer/EthTxSigner");
+const { TrxTxSigner } = require("./signer/TrxTxSigner");
+const { Trc20TxSigner } = require("./signer/Trc20TxSigner");
+const { BtcTxSigner } = require("./signer/BtcTxSigner");
+const { TxSigner } = require("./signer/TxSigner");
+const { DotTxSigner } = require("./signer/DotTxSigner");
 
-export default {
+module.exports = {
   TxSigner,
   EthTxSigner,
   Erc20TxSigner,
