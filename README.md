@@ -14,7 +14,9 @@ To sign transactions of multi coins using HDKey, specially designed for HDWallet
 
 ## usage
 
+```sh
 npm i hdwallet-signer
+```
 
 ## excamples
 
