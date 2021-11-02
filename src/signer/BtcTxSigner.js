@@ -1,3 +1,4 @@
+const { default: axios } = require("axios");
 const bitcore = require("bitcore-lib");
 const WIF = require("wif");
 const { TxSigner } = require("./TxSigner");
@@ -10,6 +11,11 @@ class BtcTxSigner extends TxSigner {
     this.wif = WIF.encode(0x80, Buffer.from(privKey, "hex"), true);
     // @ts-ignore
     this.bitcorePrivateKey = bitcore.PrivateKey.fromWIF(this.wif);
+
+    this.insightApi = axios.create({
+      baseURL: "https://api.bitcore.io/api/BTC/mainnet",
+    });
+    ("https://api.bitcore.io/api/BTC/testnet/address/mg5BH3gH9DEazQhstNWjtde4Au5e36u4J9");
   }
 
   /**
@@ -23,7 +29,7 @@ class BtcTxSigner extends TxSigner {
   async signTx(to, value, speed, change = this.fromAddress) {
     console.info(speed);
 
-    const utxoList = []; // request utxos by this.fromAddress
+    const utxoList = await this.getUtxos(this.fromAddress); // request utxos by this.fromAddress
     const tx = new bitcore.Transaction()
       .from(utxoList) // from 可以是 single utxo or utxo list
       .to(to, this.toSatoshis(value))
@@ -50,7 +56,7 @@ class BtcTxSigner extends TxSigner {
   async signTxs(toList, speed, change = this.fromAddress) {
     console.info(speed);
 
-    const utxoList = []; // request utxos by this.fromAddress
+    const utxoList = await this.getUtxos(this.fromAddress); // request utxos by this.fromAddress
     const tx = new bitcore.Transaction();
     toList.forEach(({ to, value }) => {
       tx.to(to, this.toSatoshis(value));
@@ -66,6 +72,20 @@ class BtcTxSigner extends TxSigner {
 
   toWIF() {
     return this.wif;
+  }
+
+  async getUtxos(address) {
+    const mapUtxo = ({ mintTxid, mintIndex, address, script, value }) => ({
+      txId: mintTxid,
+      outputIndex: mintIndex,
+      address,
+      script,
+      satoshis: value,
+    });
+
+    const { data } = await this.insightApi.get(`/address/${address}`);
+    const utxos = data.filter((item) => !item.spentTxid.trim()).map(mapUtxo);
+    return utxos;
   }
 }
 
