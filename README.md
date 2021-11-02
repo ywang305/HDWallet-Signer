@@ -20,11 +20,14 @@ To sign transactions of multi coins using HDKey, specially designed for HDWallet
   ```
 - config blockchain providers .env file in project root path
 
-  ```sh
-  ETH_PROVIDER=your-node or Infura or getBlock...
-  TRON_API_KEY= api key for tron official (https://api.trongrid.io)
-  FIL_PROVIDER=
+  - ETH_PROVIDER
+  - FIL_RPOVIDER
+  - TRON_API_KEY
 
+  ```sh
+  ETH_PROVIDER=...your-node or Infura or getBlock...
+  FIL_PROVIDER=...same as above
+  TRON_API_KEY=...api key for tron official (https://api.trongrid.io)
   ```
 
 ## examples
