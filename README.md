@@ -14,7 +14,7 @@ To sign transactions of multi coins using HDKey, specially designed for HDWallet
 
 ## usage
 
-- install package
+- install package [hdwallet-signer](https://www.npmjs.com/package/hdwallet-signer)
   ```sh
   npm i hdwallet-signer
   ```
@@ -27,7 +27,7 @@ To sign transactions of multi coins using HDKey, specially designed for HDWallet
 
   ```
 
-## excamples
+## examples
 
 to sign a tx of some coin, you need get a private key first, which is ideally derived from [HDKey](https://npmjs.com/package/hdkey)
 , or any kind of HDWallet libarary that conforms to [BIP32](https://www.npmjs.com/package/bip32).
