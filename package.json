@@ -1,7 +1,7 @@
 {
   "name": "hdwallet-signer",
-  "version": "0.1.5",
-  "description": "HDkey signer of transaction for BTC, ETH, TRX, FIL, DOT...",
+  "version": "0.1.6",
+  "description": "HDkey signer of transaction for BTC, ETH, TRX, FIL, DOT..., also can generate WIF",
   "main": "src/index.js",
   "repository": {
     "type": "git",
@@ -27,7 +27,8 @@
     "Filecoin",
     "Polkadot",
     "Bitcoin",
-    "Dogecoin"
+    "Dogecoin",
+    "WIF"
   ],
   "author": "Yao",
   "license": "MIT",
