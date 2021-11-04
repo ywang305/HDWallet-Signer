@@ -23,7 +23,7 @@ class FilecoinTxSigner extends TxSigner {
 
   getGasLimit(speed) {
     const gasLimit =
-      speed === "fast" ? 13_000_000 : speed === "slow" ? 800_000 : 11_000_000;
+      speed === "fast" ? 1_300_000 : speed === "slow" ? 800_000 : 1_100_000;
     return gasLimit;
   }
 
