@@ -1,7 +1,7 @@
 const { TxSigner } = require("./TxSigner");
 const axios = require("axios");
 const { FilecoinSigner } = require("@blitslabs/filecoin-js-signer");
-const BigNumber = require("bignumber.js");
+const { BigNumber } = require("bignumber.js");
 
 const FIL_PROVIDER =
   process.env.FIL_PROVIDER || process.env.VUE_APP_FIL_PROVIDER;
@@ -23,7 +23,7 @@ class FilecoinTxSigner extends TxSigner {
 
   getGasLimit(speed) {
     const gasLimit =
-      speed === "fast" ? 7_000_000 : speed === "norm" ? 1000_000 : 600_000;
+      speed === "fast" ? 13_000_000 : speed === "slow" ? 800_000 : 11_000_000;
     return gasLimit;
   }
 
@@ -53,7 +53,7 @@ class FilecoinTxSigner extends TxSigner {
       Value: amount,
       GasLimit: gasLimit,
       GasFeeCap: "0",
-      GasPremium: "0",
+      GasPremium: "500000",
       Method: 0,
       Params: "",
     };
@@ -62,7 +62,7 @@ class FilecoinTxSigner extends TxSigner {
       id: 0,
       jsonrpc: "2.0",
       method: "Filecoin.GasEstimateMessageGas",
-      params: [message, { MaxFee: "30000000000000" }, []],
+      params: [message, { MaxFee: "0" }, []],
     });
     if ("error" in msgGasRes) {
       console.error(msgGasRes.error);
