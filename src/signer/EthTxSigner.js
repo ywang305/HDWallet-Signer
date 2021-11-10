@@ -53,7 +53,7 @@ class EthTxSigner extends TxSigner {
     };
   }
 
-  toWIF() {
+  async toWIF() {
     return this.privKey;
   }
 }
