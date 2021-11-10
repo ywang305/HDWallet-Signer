@@ -1,6 +1,6 @@
 {
   "name": "hdwallet-signer",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "HDkey signer of transaction for BTC, ETH, TRX, FIL, DOT..., also can generate WIF",
   "main": "src/index.js",
   "repository": {

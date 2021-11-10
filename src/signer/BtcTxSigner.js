@@ -70,7 +70,7 @@ class BtcTxSigner extends TxSigner {
     return { txid, signedTx };
   }
 
-  toWIF() {
+  async toWIF() {
     return this.wif;
   }
 

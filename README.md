@@ -36,7 +36,7 @@ To sign transactions of multi coins using the standard private key (hex string) 
 const { BtcTxSigner } = require("hdwallet-signer");
 // ... fromPrivKey, fromAddress
 let signer = new BtcTxSigner(fromPrivKey, fromAddress);
-const walletImportFormat = signer.toWIF();
+const walletImportFormat = await signer.toWIF();
 ```
 
 ## examples of signing

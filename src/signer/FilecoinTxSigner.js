@@ -76,7 +76,7 @@ class FilecoinTxSigner extends TxSigner {
     return { txid: null, signedTx };
   }
 
-  toWIF() {
+  async toWIF() {
     const base64Key = Buffer.from(this.privKey, "hex").toString("base64");
     const lotusPrivKey = Buffer.from(
       JSON.stringify({

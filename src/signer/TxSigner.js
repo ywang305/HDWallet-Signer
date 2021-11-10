@@ -28,9 +28,9 @@ class TxSigner {
 
   /**
    * Generate Wallet Import Format / keystore
-   * @returns {*}
+   * @returns {Promise<string>}
    */
-  toWIF() {
+  async toWIF() {
     throw new Error("Not Implemented Method: toWIF");
   }
 }

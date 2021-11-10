@@ -14,15 +14,16 @@ class DotTxSigner extends TxSigner {
   constructor(privKey, fromAddress) {
     super(privKey);
     this.fromAddress = fromAddress;
-    this.keypair = this._getKeypairByPriv(privKey);
     this._wsProvider = new WsProvider("wss://rpc.polkadot.io");
   }
 
-  _getKeypairByPriv(priv) {
-    if (!priv.startsWith("0x")) priv = "0x" + priv;
+  async _getKeyPair() {
+    await cryptoWaitReady();
+    const privKey = this.privKey;
+    if (!privKey.startsWith("0x")) privKey = "0x" + privKey;
     const keyring = new Keyring({ type: "sr25519", ss58Format: 0 });
 
-    const keypair = keyring.createFromUri(priv, {
+    const keypair = keyring.createFromUri(privKey, {
       whenCreated: Date.now(),
     });
     return keypair;
@@ -74,7 +75,6 @@ class DotTxSigner extends TxSigner {
 
   async signTx(to, value, speed) {
     console.info(speed);
-    await cryptoWaitReady();
 
     const block = await this._getBlock();
     const blockHash = await this._getBlockhash();
@@ -117,7 +117,8 @@ class DotTxSigner extends TxSigner {
     );
     const signingPayload = construct.signingPayload(unsigned, { registry });
     console.log(`\nDOT Payload to Sign: ${signingPayload}`);
-    const signature = signWith(this.keypair, signingPayload, {
+    const keypair = await this._getKeyPair();
+    const signature = signWith(keypair, signingPayload, {
       metadataRpc,
       registry,
     });
@@ -135,9 +136,10 @@ class DotTxSigner extends TxSigner {
     return { txid: expectedTxHash, signedTx: tx };
   }
 
-  toWIF() {
+  async toWIF() {
     let pass = "abc";
-    const json = this.keypair.toJson(pass);
+    const keypair = await this._getKeyPair();
+    const json = keypair.toJson(pass);
     const keystore = {
       version: 3,
       ...json,
