@@ -19,7 +19,7 @@ class DotTxSigner extends TxSigner {
 
   async _getKeyPair() {
     await cryptoWaitReady();
-    const privKey = this.privKey;
+    let privKey = this.privKey;
     if (!privKey.startsWith("0x")) privKey = "0x" + privKey;
     const keyring = new Keyring({ type: "sr25519", ss58Format: 0 });
 
@@ -30,9 +30,11 @@ class DotTxSigner extends TxSigner {
   }
 
   async getAPI() {
+    if (this.api) return this.api;
+
     try {
-      this.api =
-        this.api ?? (await ApiPromise.create({ provider: this._wsProvider }));
+      this.api = await ApiPromise.create({ provider: this._wsProvider });
+      return this.api;
     } catch (err) {
       return null;
     }
@@ -44,7 +46,7 @@ class DotTxSigner extends TxSigner {
    */
   async _getBlock() {
     const api = await this.getAPI();
-    const { block } = await api?.rpc.chain.getBlock();
+    const { block } = await api.rpc.chain.getBlock();
     return block;
   }
   /**
@@ -53,23 +55,23 @@ class DotTxSigner extends TxSigner {
    */
   async _getBlockhash() {
     const api = await this.getAPI();
-    const blockHash = await api?.rpc.chain.getBlockHash();
+    const blockHash = await api.rpc.chain.getBlockHash();
     return blockHash;
   }
   async _getGenesisHash() {
     const api = await this.getAPI();
-    const blockHash = await api?.rpc.chain.getBlockHash(0);
+    const blockHash = await api.rpc.chain.getBlockHash(0);
     return blockHash;
   }
   async _getMetadata() {
     const api = await this.getAPI();
-    const metadata = await api?.rpc.state.getMetadata();
+    const metadata = await api.rpc.state.getMetadata();
     return metadata;
   }
   async _getRuntimeVersion() {
     const api = await this.getAPI();
     const { specVersion, transactionVersion, specName } =
-      await api?.rpc.state.getRuntimeVersion();
+      await api.rpc.state.getRuntimeVersion();
     return { specVersion, transactionVersion, specName };
   }
 
