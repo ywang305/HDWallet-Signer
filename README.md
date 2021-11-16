@@ -231,10 +231,14 @@ const { DotTxSigner } = require("hdwallet-signer");
 
 const fromPrivKey =
   "0x697f372c2195229f243c6bfd5b87224f9687152aad719cbb6e116f9f9cd797d7";
-const fromAddress = "1RepbjWkoc3sfRGiUSjs1qW2X5WuNPBiupU9Y5nGy1scCfw";
 const toAddress = "12bkmmjNebSZwoFbmBEAWE35gCVLjPYmtGRgmGECD2qnXQT9";
 
-const signer = new DotTxSigner(fromPrivKey, fromAddress);
+const signer = new DotTxSigner(fromPrivKey);
+/**
+ * // if you'd like to send all tokens out of the signer's account,
+ * // set a 2nd construcotr param as keepSignerAlive = false, like:
+ * const signer = new DotTxSigner(fromPrivKey, false);
+ **/
 
 async function testErc20TxSigner() {
   const { txid, signedTx } = await signer.signTx(toAddress, "0.01");

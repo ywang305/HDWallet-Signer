@@ -9,12 +9,13 @@ const {
 const { Keyring } = require("@polkadot/keyring");
 const { ApiPromise, WsProvider } = require("@polkadot/api");
 const { EXTRINSIC_VERSION } = require("@polkadot/types/extrinsic/v4/Extrinsic");
+const { BigNumber } = require("bignumber.js");
 
 class DotTxSigner extends TxSigner {
-  constructor(privKey, fromAddress) {
+  constructor(privKey, keepSignerAlive = true) {
     super(privKey);
-    this.fromAddress = fromAddress;
     this._wsProvider = new WsProvider("wss://rpc.polkadot.io");
+    this.keepSignerAlive = keepSignerAlive;
   }
 
   async _getKeyPair() {
@@ -40,14 +41,20 @@ class DotTxSigner extends TxSigner {
     }
   }
 
+  async _getNonce(ADDR) {
+    const api = await this.getAPI();
+    const { nonce } = await api.query.system.account(ADDR);
+    return nonce.toNumber();
+  }
+
   /**
    *
    * @returns {Promise<object>}
    */
-  async _getBlock() {
+  async _getBlockNumber() {
     const api = await this.getAPI();
     const { block } = await api.rpc.chain.getBlock();
-    return block;
+    return block.header.number.toNumber();
   }
   /**
    *
@@ -56,29 +63,40 @@ class DotTxSigner extends TxSigner {
   async _getBlockhash() {
     const api = await this.getAPI();
     const blockHash = await api.rpc.chain.getBlockHash();
-    return blockHash;
+    return blockHash.toHex();
   }
   async _getGenesisHash() {
     const api = await this.getAPI();
     const blockHash = await api.rpc.chain.getBlockHash(0);
-    return blockHash;
+    return blockHash.toHex();
   }
   async _getMetadata() {
     const api = await this.getAPI();
     const metadata = await api.rpc.state.getMetadata();
-    return metadata;
+    return metadata.toHex();
   }
   async _getRuntimeVersion() {
     const api = await this.getAPI();
     const { specVersion, transactionVersion, specName } =
       await api.rpc.state.getRuntimeVersion();
-    return { specVersion, transactionVersion, specName };
+    return {
+      specVersion: specVersion.toNumber(),
+      transactionVersion: transactionVersion.toNumber(),
+      specName: specName.toString(),
+    };
   }
 
+  /**
+   *
+   * @param {string} to
+   * @param {string} value unit in DOT
+   * @param {string} speed slow|norm|fast
+   * @returns
+   */
   async signTx(to, value, speed) {
-    console.info(speed);
+    console.info(to, value, speed);
 
-    const block = await this._getBlock();
+    const blockNumber = await this._getBlockNumber();
     const blockHash = await this._getBlockhash();
     const genesisHash = await this._getGenesisHash();
     const metadataRpc = await this._getMetadata();
@@ -93,21 +111,27 @@ class DotTxSigner extends TxSigner {
       metadataRpc,
     });
 
-    const unsigned = methods.balances.transferKeepAlive(
+    const keypair = await this._getKeyPair();
+    const fromAddress = keypair.address;
+    const nonce = await this._getNonce(fromAddress);
+    // const unsigned = methods.balances.transfer()
+    const unsigned = (
+      this.keepSignerAlive
+        ? methods.balances.transferKeepAlive
+        : methods.balances.transfer
+    )(
       {
-        value: value,
+        value: new BigNumber(value).multipliedBy(1e10).toString(),
         dest: to, // TO ADDRESS
       },
       {
-        address: this.fromAddress,
+        address: fromAddress,
         blockHash,
-        blockNumber: registry
-          .createType("BlockNumber", block.header.number)
-          .toNumber(),
+        blockNumber: registry.createType("BlockNumber", blockNumber).toNumber(),
         eraPeriod: 64,
         genesisHash,
         metadataRpc,
-        nonce: 0, // Assuming this is Alice's first tx on the chain
+        nonce, //0, // Assuming this is Alice's first tx on the chain
         specVersion,
         tip: 0,
         transactionVersion,
@@ -118,8 +142,7 @@ class DotTxSigner extends TxSigner {
       }
     );
     const signingPayload = construct.signingPayload(unsigned, { registry });
-    console.log(`\nDOT Payload to Sign: ${signingPayload}`);
-    const keypair = await this._getKeyPair();
+
     const signature = signWith(keypair, signingPayload, {
       metadataRpc,
       registry,
